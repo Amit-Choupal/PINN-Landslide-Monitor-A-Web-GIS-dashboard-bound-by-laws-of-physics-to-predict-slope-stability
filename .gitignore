@@ -1,0 +1,6 @@
+# Ignore raw hefty geospatial layers or local python envs
+*.tif
+*.pbf
+.venv/
+__pycache__/
+.streamlit/
