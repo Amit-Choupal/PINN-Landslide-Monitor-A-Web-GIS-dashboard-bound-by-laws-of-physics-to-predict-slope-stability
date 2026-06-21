@@ -6,7 +6,26 @@ Mountainous regions like West Arunachal Pradesh are highly vulnerable to catastr
 
 Compounding this problem, there is currently an absolute absence of any operational predictive hazard models tailored specifically for these remote Himalayan corridors. This creates a critical, dangerous gap in reliable, real-time early warning systems required to protect vulnerable local communities and save lives.
 
-# This project bridges the gap between deep learning and physics. By injecting geotechnical engineering principles directly into an AI, we created a smart system that understands terrain limits. It provides an interactive web dashboard where engineers or local authorities can input coordinates or environmental conditions to get an immediate, physics-verified hazard assessment, acting as a scalable tool for disaster risk reduction.
+This project bridges the gap between deep learning and physics. By injecting geotechnical engineering principles directly into an AI, we created a smart system that understands terrain limits. It provides an interactive web dashboard where engineers or local authorities can input coordinates or environmental conditions to get an immediate, physics-verified hazard assessment, acting as a scalable tool for disaster risk reduction.
+
+# Dataset Description & Data Acquisition
+The framework relies on a unified, multi-source dataset that pairs static terrain topography with dynamic environmental triggers. The data was acquired from open-source geospatial repositories and processed into a single target file.
+
+1. Data Components & Sourcing
+Digital Elevation Model (DEM): High-resolution raster data was downloaded from the USGS EarthExplorer. This provides the core topographic features, specifically cell elevation and surface slope angles, which dictate baseline gravitational stress.
+
+Historical Landslide Records: Global historical landslide occurrence coordinates were sourced via Kaggle. This dataset serves as the ground-truth marker for unstable slopes (positive labels).
+
+Climate Data (Rainfall Depth): Hourly and daily precipitation records matching the timeline of historical events were extracted from the Open-Meteo API. This acts as the primary dynamic trigger for soil saturation and pore-water pressure spikes.
+
+Normalized Difference Vegetation Index (NDVI): Vegetation density metrics were integrated via open ecological data to factor in root-cohesion strength, which naturally anchors soil and mitigates failure risk.
+
+2. Data Engineering & Preprocessing
+Spatial Filtering: A coordinate bounding box was applied to clip the global Kaggle dataset, ensuring only landslide events falling strictly within the West Arunachal Pradesh DEM framework were retained.
+
+Negative Data Generation: Since historical inventories only record active failures, the training data was heavily skewed. Synthetic "stable slope" data points (negative labels) were mathematically generated across flat, low-risk zones to balance the dataset.
+
+The Master Dataset: All spatial, meteorological, and ecological parameters were aligned by geographic coordinates and compiled into a unified file: Arunachal_landslide_dataset.csv. This clean matrix serves as the direct training baseline for the PyTorch PINN model.
 
 # Project Overview
 The PINN Landslide Monitor is an innovative Web-GIS hazard monitoring system designed specifically for the rugged terrain of West Arunachal Pradesh. This project bridges the gap between deep learning and classical geomechanics by embedding the laws of physics—like gravity, shear strength, and friction—directly into an artificial intelligence framework.
@@ -21,7 +40,7 @@ Step 2: Environmental Feature Integration & Data Balancing
 To simulate realistic environmental triggers, dynamic climate and ecological parameters were integrated from Open-Meteo:
 Rainfall Depth: Sourced from historical weather records to match heavy monsoon cloudburst stresses.
 Vegetation Cover (NDVI): Sourced to factor in how well root systems anchor the soil structure and prevent erosion.
-Because the historical Kaggle dataset only contained points where landslides did happen (positive labels), the data was naturally heavily skewed. To fix this, synthetic "stable slope" data (negative labels) was mathematically generated for flat, low-risk geographical areas. This gave the AI a perfectly balanced view of safety versus hazard. All of these layers were matched up and merged into a clean master dataset.csv file.
+Because the historical Kaggle dataset only contained points where landslides did happen (positive labels), the data was naturally heavily skewed. To fix this, synthetic "stable slope" data (negative labels) was mathematically generated for flat, low-risk geographical areas. This gave the AI a perfectly balanced view of safety versus hazard. All of these layers were matched up and merged into a Arunachal_landslide_dataset.csv file.
 
 Step 3: Neural Network Training (The PINN)
 Using the compiled dataset, a Physics-Informed Neural Network (PINN) was built and trained in PyTorch. Unlike standard networks, this model optimizes a split loss function: it learns from the historical data points, but is heavily penalized if it violates gravity rules (e.g., predicting a steep, barren cliff under heavy rain as "safe"). The model outputs a geotechnical Factor of Safety (FOS) score.
