@@ -1,4 +1,5 @@
 # PINN-Landslide-Monitor-A-Web-GIS-dashboard-bound-by-laws-of-physics-to-predict-slope-stability
+
 USGS DEM terrain data fused with Open-Meteo rainfall and vegetation metrics. By spatial-matching these features with historical global landslide records, we built a unified dataset to train a Physics-Informed Neural Network (PINN). This powers a Web-GIS app predicting slope stability to foster regional disaster sustainability.
 
 # Problem Statement
